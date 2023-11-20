@@ -2,20 +2,19 @@ package com.edwin.distributed.chururu.util.merkletree;
 
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.SignedBytes;
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HexFormat;
 import java.util.List;
 
 public class MerkleTreeServiceImp implements MerkleTreeService {
 
+    private static final String ALGORITHM = "SHA-256";
     List<MerkleNode> leafs;
-    private Comparator<MerkleNode> merkleNodeComparator;
+    private final Comparator<MerkleNode> merkleNodeComparator;
 
     public MerkleTreeServiceImp() {
         leafs = new ArrayList<>();
@@ -44,7 +43,7 @@ public class MerkleTreeServiceImp implements MerkleTreeService {
             for (int i = 0;i < n;i +=2) {
                 MerkleNode left = queue.poll();
                 MerkleNode right = queue.poll();
-                byte[] parentHash = generateHash(left.getHash(), right.getHash());
+                byte[] parentHash = combine(left.getHash(), right.getHash());
                 MerkleNode parent = new MerkleNode(parentHash, null, left, right);
                 left.setParent(parent);
                 right.setParent(parent);
@@ -54,8 +53,7 @@ public class MerkleTreeServiceImp implements MerkleTreeService {
         return queue.poll();
     }
 
-    @Override
-    public void ensureEven(List<byte[]> hashes) {
+    private void ensureEven(List<byte[]> hashes) {
         if(hashes.size() % 2 == 0) {
             return;
         }
@@ -63,7 +61,7 @@ public class MerkleTreeServiceImp implements MerkleTreeService {
     }
 
     @Override
-    public byte[] generateHash(byte[] hash1, byte[] hash2) {
+    public byte[] combine(byte[] hash1, byte[] hash2) {
         return hash(Bytes.concat(hash1, hash2));
     }
 
@@ -102,7 +100,6 @@ public class MerkleTreeServiceImp implements MerkleTreeService {
 
     /**
      * Return null if the leaf node is not found.
-     *
      * Time complexity: Log(n)
      *
      * @param hash
@@ -127,9 +124,9 @@ public class MerkleTreeServiceImp implements MerkleTreeService {
         for(int i = 1;i < proof.size();i++) {
             ProofItem newElement = proof.get(i);
             if(newElement.side() == NodeSide.LEFT) {
-                hash = generateHash(newElement.hash(), hash);
+                hash = combine(newElement.hash(), hash);
             } else {
-                hash = generateHash(hash, newElement.hash());
+                hash = combine(hash, newElement.hash());
             }
         }
         return new MerkleNode((hash));
@@ -137,16 +134,10 @@ public class MerkleTreeServiceImp implements MerkleTreeService {
 
     public static byte[] hash(byte[] input) {
         try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            MessageDigest digest = MessageDigest.getInstance(ALGORITHM);
             return digest.digest(input);
         } catch (NoSuchAlgorithmException e) {
             return null;
         }
-    }
-
-    public static String bytesToText(byte[] hash) {
-        String str = "0x";
-        str = str.concat(HexFormat.of().formatHex(hash));
-        return str;
     }
 }

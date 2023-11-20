@@ -18,13 +18,12 @@ class MerkleTreeServiceImpTest {
 
     @Test
     void getRoot() {
-        byte[][] hashes = new byte[][]{"A".getBytes(StandardCharsets.UTF_8), "B".getBytes(
+        byte[][] hashes = new byte[][]{"A".getBytes(StandardCharsets.UTF_8), "Å".getBytes(
                 StandardCharsets.UTF_8)};
         byte[] res = Bytes.concat(hashes);
         res = MerkleTreeServiceImp.hash(res);
 
         MerkleNode rootHash = merkleTreeService.generateMerkleTree(Arrays.asList(hashes));
-        System.out.println(rootHash);
         Assertions.assertArrayEquals(res, rootHash.hash);
     }
 
@@ -41,14 +40,17 @@ class MerkleTreeServiceImpTest {
     private MerkleNode getMerkleNode() {
         List<byte[]> hashes = new ArrayList<>(List.of("A".getBytes(StandardCharsets.UTF_8), "B".getBytes(
                 StandardCharsets.UTF_8), "C".getBytes(StandardCharsets.UTF_8), "D".getBytes(StandardCharsets.UTF_8)));
-        MerkleNode root = merkleTreeService.generateMerkleTree(hashes);
-        return root;
+        return merkleTreeService.generateMerkleTree(hashes);
     }
 
-//    @Test
-//    void generateTree() {
-//        List<String> hashes = List.of("A", "B", "C", "D");
-//        List<List<String>> result = merkleTreeService.generateTree(hashes);
-//        System.out.println(result);
-//    }
+    @Test
+    void generateTree() {
+        List<byte[]> hashes = new ArrayList<>(List.of("A".getBytes(StandardCharsets.UTF_8), "B".getBytes(
+                StandardCharsets.UTF_8), "C".getBytes(StandardCharsets.UTF_8), "D".getBytes(StandardCharsets.UTF_8)));
+        hashes.forEach(e -> {
+            System.out.println("Length array byte -> " + e.length);
+        });
+        MerkleNode merkleNode = merkleTreeService.generateMerkleTree(hashes);
+        Assertions.assertNotNull(merkleNode);
+    }
 }

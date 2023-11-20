@@ -1,7 +1,8 @@
 package com.edwin.distributed.chururu.util.merkletree;
 
+import com.google.common.base.Objects;
+import java.util.Arrays;
 import java.util.HexFormat;
-import java.util.Objects;
 
 public class MerkleNode {
     byte[] hash;
@@ -54,8 +55,8 @@ public class MerkleNode {
 
     @Override
     public String toString() {
-        return "MerkleNode{0x" +
-                "hash='" + HexFormat.of().formatHex(hash) + '\'' +
+        return "MerkleNode{" +
+                "hash='0x" + HexFormat.of().formatHex(hash) + '\'' +
                 '}';
     }
 
@@ -67,13 +68,12 @@ public class MerkleNode {
         if (!(o instanceof MerkleNode that)) {
             return false;
         }
-        return Objects.equals(hash, that.hash);
+
+        return Arrays.equals(hash, that.hash);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(hash);
+        return Arrays.hashCode(hash);
     }
-
-
 }
