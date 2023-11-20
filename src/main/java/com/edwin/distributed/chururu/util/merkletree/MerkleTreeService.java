@@ -8,4 +8,5 @@ public interface MerkleTreeService {
     List<ProofItem> generateProof(MerkleNode leaf);
     MerkleNode getLeaf(byte[] hash, MerkleNode root);
     MerkleNode generateRootFromProof(List<ProofItem> proof);
+    List<MerkleNode> detectDifferences(MerkleNode node1, MerkleNode node2);
 }

@@ -18,7 +18,7 @@ public class MerkleTreeServiceImp implements MerkleTreeService {
 
     public MerkleTreeServiceImp() {
         leafs = new ArrayList<>();
-        merkleNodeComparator = (a, b) -> SignedBytes.lexicographicalComparator().compare(a.hash, b.hash);
+        merkleNodeComparator = (a, b) -> SignedBytes.lexicographicalComparator().compare(a.getHash(), b.getHash());
     }
 
     /**
@@ -73,27 +73,27 @@ public class MerkleTreeServiceImp implements MerkleTreeService {
      */
     @Override
     public List<ProofItem> generateProof(MerkleNode leaf) {
-        if(leaf.parent == null) {
+        if(leaf.getParent() == null) {
             return null;
         }
 
         MerkleNode current = leaf;
         List<ProofItem> items = new ArrayList<>();
-        if (current.parent.left == current) {
+        if (current.getParent().getLeft() == current) {
             items.add(new ProofItem(current.getHash(), NodeSide.LEFT));
         } else {
             items.add(new ProofItem(current.getHash(), NodeSide.RIGHT));
         }
-        while (current.parent != null) {
+        while (current.getParent() != null) {
             MerkleNode sibling;
-            if(current.parent.left == current) {
-                sibling = current.parent.right;
-                items.add(new ProofItem(sibling.hash, NodeSide.RIGHT));
+            if(current.getParent().getLeft() == current) {
+                sibling = current.getParent().getRight();
+                items.add(new ProofItem(sibling.getHash(), NodeSide.RIGHT));
             } else {
-                sibling = current.parent.left;
-                items.add(new ProofItem(sibling.hash, NodeSide.LEFT));
+                sibling = current.getParent().getLeft();
+                items.add(new ProofItem(sibling.getHash(), NodeSide.LEFT));
             }
-            current = current.parent;
+            current = current.getParent();
         }
         return items;
     }
@@ -131,6 +131,41 @@ public class MerkleTreeServiceImp implements MerkleTreeService {
         }
         return new MerkleNode((hash));
     }
+
+    /**
+     * Both Merkle Trees must be of the same height. It will return all node1 differences
+     *
+     * @param node1
+     * @param node2
+     * @return
+     */
+    @Override
+    public List<MerkleNode> detectDifferences(MerkleNode node1, MerkleNode node2) {
+        List<MerkleNode> res = new ArrayList<>();
+        if(node1 == null && node2 == null) {
+            return res;
+        }
+        diff(node1, node2, res);
+        return res;
+    }
+
+
+    private void diff(MerkleNode node1, MerkleNode node2, List<MerkleNode> res) {
+        if(node1.equals(node2)) return;
+
+        if(isLeaf(node1) && isLeaf(node2)) {
+            res.add(node1);
+            return;
+        }
+
+        diff(node1.getLeft(), node2.getLeft(), res);
+        diff(node1.getRight(), node2.getRight(), res);
+    }
+
+    private boolean isLeaf(MerkleNode node) {
+        return node.getLeft() == null && node.getRight() == null;
+    }
+
 
     public static byte[] hash(byte[] input) {
         try {

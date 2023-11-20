@@ -1,14 +1,13 @@
 package com.edwin.distributed.chururu.util.merkletree;
 
-import com.google.common.base.Objects;
 import java.util.Arrays;
 import java.util.HexFormat;
 
 public class MerkleNode {
-    byte[] hash;
-    MerkleNode parent;
-    MerkleNode left;
-    MerkleNode right;
+    private byte[] hash;
+    private MerkleNode parent;
+    private MerkleNode left;
+    private MerkleNode right;
 
     public MerkleNode(byte[] hash) {
         this.hash = hash;

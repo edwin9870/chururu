@@ -24,7 +24,7 @@ class MerkleTreeServiceImpTest {
         res = MerkleTreeServiceImp.hash(res);
 
         MerkleNode rootHash = merkleTreeService.generateMerkleTree(Arrays.asList(hashes));
-        Assertions.assertArrayEquals(res, rootHash.hash);
+        Assertions.assertArrayEquals(res, rootHash.getHash());
     }
 
     @Test
@@ -47,10 +47,22 @@ class MerkleTreeServiceImpTest {
     void generateTree() {
         List<byte[]> hashes = new ArrayList<>(List.of("A".getBytes(StandardCharsets.UTF_8), "B".getBytes(
                 StandardCharsets.UTF_8), "C".getBytes(StandardCharsets.UTF_8), "D".getBytes(StandardCharsets.UTF_8)));
-        hashes.forEach(e -> {
-            System.out.println("Length array byte -> " + e.length);
-        });
         MerkleNode merkleNode = merkleTreeService.generateMerkleTree(hashes);
         Assertions.assertNotNull(merkleNode);
+    }
+
+    @Test
+    void shouldDetectDifferences() {
+        byte[] differenceByte = "D".getBytes(StandardCharsets.UTF_8);
+        List<byte[]> hashes = new ArrayList<>(List.of("A".getBytes(StandardCharsets.UTF_8), "B".getBytes(
+                StandardCharsets.UTF_8), "C".getBytes(StandardCharsets.UTF_8), differenceByte));
+        MerkleNode merkleNode1 = merkleTreeService.generateMerkleTree(hashes);
+
+        hashes = new ArrayList<>(List.of("A".getBytes(StandardCharsets.UTF_8), "B".getBytes(
+                StandardCharsets.UTF_8), "C".getBytes(StandardCharsets.UTF_8), "P".getBytes(StandardCharsets.UTF_8)));
+        MerkleNode merkleNode2 = merkleTreeService.generateMerkleTree(hashes);
+
+        List<MerkleNode> differences = merkleTreeService.detectDifferences(merkleNode1, merkleNode2);
+        Assertions.assertEquals(differenceByte, differences.get(0).getHash());
     }
 }
