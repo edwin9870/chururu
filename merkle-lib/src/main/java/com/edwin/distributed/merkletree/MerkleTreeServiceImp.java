@@ -1,9 +1,8 @@
 package com.edwin.distributed.merkletree;
 
+import com.edwin.distributed.merkletree.util.HashUtil;
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.SignedBytes;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,7 +11,6 @@ import java.util.List;
 
 public class MerkleTreeServiceImp implements MerkleTreeService {
 
-    private static final String ALGORITHM = "SHA-256";
     List<MerkleNode> leafs;
     private final Comparator<MerkleNode> merkleNodeComparator;
 
@@ -62,7 +60,7 @@ public class MerkleTreeServiceImp implements MerkleTreeService {
 
     @Override
     public byte[] combine(byte[] hash1, byte[] hash2) {
-        return hash(Bytes.concat(hash1, hash2));
+        return HashUtil.hash(Bytes.concat(hash1, hash2));
     }
 
     /**
@@ -164,15 +162,5 @@ public class MerkleTreeServiceImp implements MerkleTreeService {
 
     private boolean isLeaf(MerkleNode node) {
         return node.getLeft() == null && node.getRight() == null;
-    }
-
-
-    public static byte[] hash(byte[] input) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance(ALGORITHM);
-            return digest.digest(input);
-        } catch (NoSuchAlgorithmException e) {
-            return null;
-        }
     }
 }

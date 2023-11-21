@@ -4,6 +4,7 @@ import com.edwin.distributed.merkletree.MerkleNode;
 import com.edwin.distributed.merkletree.MerkleTreeService;
 import com.edwin.distributed.merkletree.MerkleTreeServiceImp;
 import com.edwin.distributed.merkletree.ProofItem;
+import com.edwin.distributed.merkletree.util.HashUtil;
 import com.google.common.primitives.Bytes;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ class MerkleTreeServiceImpTest {
         byte[][] hashes = new byte[][]{"A".getBytes(StandardCharsets.UTF_8), "Å".getBytes(
                 StandardCharsets.UTF_8)};
         byte[] res = Bytes.concat(hashes);
-        res = MerkleTreeServiceImp.hash(res);
+        res = HashUtil.hash(res);
 
         MerkleNode rootHash = merkleTreeService.generateMerkleTree(Arrays.asList(hashes));
         Assertions.assertArrayEquals(res, rootHash.getHash());

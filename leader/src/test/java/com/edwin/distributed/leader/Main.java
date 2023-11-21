@@ -1,5 +1,6 @@
 package com.edwin.distributed.leader;
 
+import com.edwin.distributed.leader.service.MerkleServiceBaseImpl;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import java.io.IOException;
