@@ -1,4 +1,4 @@
-package com.edwin.distributed.chururu.util.merkletree;
+package com.edwin.distributed.merkletree;
 
 import java.util.Arrays;
 import java.util.HexFormat;

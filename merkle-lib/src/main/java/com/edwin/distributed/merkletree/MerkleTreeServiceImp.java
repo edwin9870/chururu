@@ -1,4 +1,4 @@
-package com.edwin.distributed.chururu.util.merkletree;
+package com.edwin.distributed.merkletree;
 
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.SignedBytes;

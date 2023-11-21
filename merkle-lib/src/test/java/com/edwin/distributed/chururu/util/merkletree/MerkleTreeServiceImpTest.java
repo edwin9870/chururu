@@ -1,5 +1,9 @@
 package com.edwin.distributed.chururu.util.merkletree;
 
+import com.edwin.distributed.merkletree.MerkleNode;
+import com.edwin.distributed.merkletree.MerkleTreeService;
+import com.edwin.distributed.merkletree.MerkleTreeServiceImp;
+import com.edwin.distributed.merkletree.ProofItem;
 import com.google.common.primitives.Bytes;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
