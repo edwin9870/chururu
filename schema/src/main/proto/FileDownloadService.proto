@@ -1,0 +1,15 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package com.edwin.distributed.schema.file;
+
+service FileService {
+  rpc download(FileDownloadRequest) returns (stream FileChunk);
+}
+
+message FileDownloadRequest {
+  string fileName = 1;
+}
+
+message FileChunk {
+  bytes data = 1;
+}
