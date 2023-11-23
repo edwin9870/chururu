@@ -2,4 +2,4 @@ rootProject.name = "chururu"
 include 'leader'
 include 'merkle-lib'
 include 'schema'
-
+include 'slave'

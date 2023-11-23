@@ -5,12 +5,18 @@ import java.util.HexFormat;
 
 public class MerkleNode {
     private byte[] hash;
+    private String fileName;
     private MerkleNode parent;
     private MerkleNode left;
     private MerkleNode right;
 
     public MerkleNode(byte[] hash) {
         this.hash = hash;
+    }
+
+    public MerkleNode(byte[] hash, String fileName) {
+        this.hash = hash;
+        this.fileName = fileName;
     }
 
     public MerkleNode(byte[] hash, MerkleNode parent, MerkleNode left, MerkleNode right) {
@@ -52,10 +58,19 @@ public class MerkleNode {
         this.right = right;
     }
 
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
     @Override
     public String toString() {
         return "MerkleNode{" +
                 "hash='0x" + HexFormat.of().formatHex(hash) + '\'' +
+                ", fileName='" + fileName + '\'' +
                 '}';
     }
 

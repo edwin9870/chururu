@@ -28,13 +28,11 @@ public class MerkleTreeServiceImp implements MerkleTreeService {
      * @return
      */
     @Override
-    public MerkleNode generateMerkleTree(List<byte[]> hashes) {
+    public MerkleNode generateMerkleTree(List<MerkleNode> hashes) {
         ensureEven(hashes);
-        ArrayDeque<MerkleNode> queue = new ArrayDeque<>();
-        hashes.stream().map(MerkleNode::new).forEach(e -> {
-            queue.add(e);
-            leafs.add(e);
-        });
+        ArrayDeque<MerkleNode> queue = new ArrayDeque<>(hashes);
+        leafs.addAll(hashes);
+
         leafs.sort(merkleNodeComparator);
         while (queue.size() > 1) {
             int n = queue.size();
@@ -51,7 +49,7 @@ public class MerkleTreeServiceImp implements MerkleTreeService {
         return queue.poll();
     }
 
-    private void ensureEven(List<byte[]> hashes) {
+    private void ensureEven(List<MerkleNode> hashes) {
         if(hashes.size() % 2 == 0) {
             return;
         }

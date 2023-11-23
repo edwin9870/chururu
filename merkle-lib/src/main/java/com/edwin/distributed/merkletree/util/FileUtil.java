@@ -1,4 +1,4 @@
-package com.edwin.distributed.leader.util;
+package com.edwin.distributed.merkletree.util;
 
 import java.io.File;
 import java.io.IOException;

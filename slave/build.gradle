@@ -12,9 +12,11 @@ repositories {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
-    implementation 'com.google.guava:guava:32.1.3-jre'
-    implementation project(':schema')
+    implementation "io.grpc:grpc-netty:$grpcVersion"
     implementation "io.grpc:grpc-protobuf:$grpcVersion"
+    implementation "io.grpc:grpc-stub:$grpcVersion"
+    implementation project(':schema')
+    implementation project(':merkle-lib')
 }
 
 test {

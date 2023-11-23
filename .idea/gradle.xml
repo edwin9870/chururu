@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/leader" />
             <option value="$PROJECT_DIR$/merkle-lib" />
             <option value="$PROJECT_DIR$/schema" />
+            <option value="$PROJECT_DIR$/slave" />
           </set>
         </option>
       </GradleProjectSettings>

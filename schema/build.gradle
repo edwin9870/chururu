@@ -6,8 +6,6 @@ plugins {
 group = 'com.edwin.distributed'
 version = '1.0-SNAPSHOT'
 
-def grpcVersion = '1.59.0'
-
 repositories {
     mavenCentral()
 }
